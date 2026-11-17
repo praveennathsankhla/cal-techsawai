@@ -104,13 +104,13 @@ All input fields use metric and imperial defaults; results are formatted with `I
 
 ## Deployment
 
-The app builds to a standard Node 22 server for Vercel and plain hosts. The Docker build opts into Next.js standalone output (`.next/standalone`) automatically.
+The app builds to a standard Node 22 server for Vercel and plain hosts, runs on Cloudflare Workers through OpenNext, and the Docker build opts into Next.js standalone output (`.next/standalone`) automatically.
 
 ### Before you deploy
 
 - [ ] Use Node **22** locally and on the host (`.nvmrc` is included).
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to the final public origin, with no trailing slash. It is inlined at build time, so rebuild after changing it.
-- [ ] Set `RESEND_API_KEY` (and optionally `CONTACT_FROM_EMAIL` / `CONTACT_TO_EMAIL`) if the contact form should email you. Serverless filesystems are ephemeral.
+- [ ] Set `RESEND_API_KEY` (and optionally `CONTACT_FROM_EMAIL` / `CONTACT_TO_EMAIL`) if the contact form should email you. This is **required on Cloudflare Workers**, where the filesystem is not writable.
 - [ ] Run `npm run check` (lint + type-check + production build) and fix any failures.
 - [ ] After deploying, check `/robots.txt`, `/sitemap.xml`, `/api/health`, a tool page, the contact form and a localized 404 such as `/hi/tools/not-a-tool`.
 
@@ -123,6 +123,34 @@ The app builds to a standard Node 22 server for Vercel and plain hosts. The Dock
 5. Add your custom domain, then confirm `NEXT_PUBLIC_SITE_URL` matches it exactly and redeploy.
 
 The IP language banner uses `x-vercel-ip-country` automatically. Contact messages should use Resend on Vercel because the local `.data/` directory does not persist between invocations.
+
+### Cloudflare Workers (OpenNext)
+
+The repo is preconfigured for [OpenNext Cloudflare](https://opennext.js.org/cloudflare) with `wrangler.jsonc`, `open-next.config.ts` and `public/_headers`.
+
+- Worker name: `cal-techsawai` — it must match the Cloudflare project name exactly. A mismatch between the worker name and the `WORKER_SELF_REFERENCE` service binding caused deploy error `10143` on the first attempt.
+- The prerendered pages use the read-only Workers static-assets cache, so no R2, D1, Durable Objects or `WORKER_SELF_REFERENCE` binding are needed.
+- `.open-next/` and `.wrangler/` are git-ignored.
+
+When the project is connected to Cloudflare Workers Builds, the default build command (`npm run build`) and deploy command (`npx wrangler deploy`) work: Wrangler detects `open-next.config.ts` and runs `opennextjs-cloudflare deploy` for you.
+
+Local commands:
+
+```bash
+npm run preview   # build and run in the Workers runtime (http://localhost:8787)
+npm run deploy    # build and deploy to Cloudflare
+```
+
+Set these in **Cloudflare → Workers → Settings → Variables**:
+
+| Name | Value |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | `https://techsawai.com` |
+| `RESEND_API_KEY` | your Resend API key |
+| `CONTACT_FROM_EMAIL` | verified Resend sender |
+| `CONTACT_TO_EMAIL` | inbox for contact messages |
+
+On Workers the filesystem is not writable, so the contact form **requires `RESEND_API_KEY`**; the `.data/` fallback only works on Node hosts. If you rename the Worker in the dashboard, update `name` in `wrangler.jsonc` to match.
 
 ### Docker / VPS
 

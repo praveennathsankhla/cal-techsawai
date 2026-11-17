@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Worker name must match the Cloudflare project name exactly. A mismatch
+  // between this value and the WORKER_SELF_REFERENCE service binding caused
+  // deploy error 10143 ("references Worker 'techsawai' which was not found").
+  "name": "cal-techsawai",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-17",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
