@@ -152,6 +152,15 @@ Set these in **Cloudflare → Workers → Settings → Variables**:
 
 On Workers the filesystem is not writable, so the contact form **requires `RESEND_API_KEY`**; the `.data/` fallback only works on Node hosts. If you rename the Worker in the dashboard, update `name` in `wrangler.jsonc` to match.
 
+#### Troubleshooting: deploy error 10143
+
+```
+Service binding 'WORKER_SELF_REFERENCE' references Worker 'techsawai'
+which was not found. [code: 10143]
+```
+
+This happens when `wrangler deploy` runs without a Wrangler config: its auto-configuration step detects Next.js, scaffolds `wrangler.jsonc` and adds a `WORKER_SELF_REFERENCE` binding that points at the `package.json` name instead of the Worker name. Keep `wrangler.jsonc` committed — with it present, auto-configuration is skipped and Wrangler delegates straight to `opennextjs-cloudflare deploy`. The static-assets cache needs no R2, D1, Durable Objects or self-reference binding.
+
 ### Docker / VPS
 
 A multi-stage `Dockerfile` and `docker-compose.yml` are included. The image runs as a non-root user and exposes a health check at `/api/health`. The Docker build sets `BUILD_STANDALONE=true`, which makes Next.js emit the minimal server at `.next/standalone/server.js`.
