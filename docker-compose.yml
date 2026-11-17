@@ -1,0 +1,23 @@
+services:
+  web:
+    build:
+      context: .
+      args:
+        # Baked into the build; must match the public origin.
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://techsawai.com}
+    image: techsawai:latest
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://techsawai.com}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      CONTACT_FROM_EMAIL: ${CONTACT_FROM_EMAIL:-}
+      CONTACT_TO_EMAIL: ${CONTACT_TO_EMAIL:-}
+    volumes:
+      # Durable store for contact messages when Resend is not configured.
+      - techsawai-data:/app/.data
+
+volumes:
+  techsawai-data:
