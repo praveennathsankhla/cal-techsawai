@@ -132,7 +132,9 @@ The repo is preconfigured for [OpenNext Cloudflare](https://opennext.js.org/clou
 - The prerendered pages use the read-only Workers static-assets cache, so no R2, D1, Durable Objects or `WORKER_SELF_REFERENCE` binding are needed.
 - `.open-next/` and `.wrangler/` are git-ignored.
 
-When the project is connected to Cloudflare Workers Builds, the default build command (`npm run build`) and deploy command (`npx wrangler deploy`) work: Wrangler detects `open-next.config.ts` and runs `opennextjs-cloudflare deploy` for you.
+When the project is connected to Cloudflare Workers Builds, keep the dashboard build command as `npm run build` and the deploy command as `npx wrangler deploy`. `scripts/build.mjs` detects the `WORKERS_CI` variable and runs `opennextjs-cloudflare build` there, so `.open-next/` exists before Wrangler delegates to `opennextjs-cloudflare deploy`; on Vercel, Docker and Node hosts the same script runs a plain `next build`. Without that, the deploy step fails with `Could not find compiled Open Next config, did you run the build command?`.
+
+If you prefer to configure the build explicitly in the dashboard, set the build command to `npx opennextjs-cloudflare build` and the deploy command to `npx wrangler deploy`; that produces the same result.
 
 Local commands:
 
