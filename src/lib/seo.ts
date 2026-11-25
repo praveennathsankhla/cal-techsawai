@@ -22,3 +22,13 @@ export function alternatesFor(locale: string, path = "") {
     languages: languageAlternates(path),
   };
 }
+
+/** Keep generated descriptions inside meta-description limits without cutting words. */
+export function metaDescription(value: string, fallback: string, max = 160): string {
+  const text = value.trim();
+  if (!text) return fallback;
+  if (text.length <= max) return text;
+  const clipped = text.slice(0, max - 1);
+  const boundary = clipped.lastIndexOf(" ");
+  return `${boundary > max / 2 ? clipped.slice(0, boundary) : clipped.trimEnd()}…`;
+}

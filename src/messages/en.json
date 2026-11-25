@@ -3,7 +3,7 @@
     "siteName": "TechSawai",
     "tagline": "Practical calculators for building, making and everyday life.",
     "defaultTitle": "TechSawai — Free Construction, Hobby & Everyday Calculators",
-    "defaultDescription": "31 free, accurate calculators for construction, hobbies and everyday conversions. Check the maths, see the formula and get instant estimates in 18 languages."
+    "defaultDescription": "31 free calculators for building, hobbies and everyday conversions. See the formula and a worked example, then get an instant answer in 18 languages — no sign-up."
   },
   "notFound": {
     "title": "Page not found",
@@ -71,9 +71,9 @@
     "all": "All tools"
   },
   "categoryDescriptions": {
-    "construction": "Concrete, paint, lumber, roofing and the rest of the build-site essentials.",
-    "hobby": "Yarn, resin, filament, brewing and the projects you do for the love of it.",
-    "universal": "Quick, reliable conversions for length, weight, temperature, volume and more."
+    "construction": "Work out concrete, paint, tile, lumber and roofing quantities before you buy. Each calculator shows the formula, a worked example, sensible waste allowances and practical ordering tips so you can check the number yourself.",
+    "hobby": "Plan yarn, resin, filament, brewing and other projects with calculators built for makers. See the formula, a worked example and tips on waste and material choices before you start cutting or mixing.",
+    "universal": "Convert length, weight, temperature, volume and other everyday units accurately. Pick your units, see the result instantly, and check the conversion formula and examples so the number makes sense."
   },
   "common": {
     "calculate": "Calculate",
@@ -177,13 +177,13 @@
   },
   "seo": {
     "homeTitle": "TechSawai — Free Construction, Hobby & Everyday Calculators",
-    "homeDescription": "31 free, accurate calculators for construction, hobbies and everyday conversions. Check the maths, see the formula and get instant estimates in 18 languages.",
+    "homeDescription": "31 free calculators for building, hobbies and everyday conversions. See the formula and a worked example, then get an instant answer in 18 languages — no sign-up.",
     "toolsTitle": "All Calculators — Construction, Hobbies & Everyday Tools",
-    "toolsDescription": "Browse all 31 free TechSawai calculators for concrete, paint, lumber, yarn, resin, 3D printing, brewing and unit conversion.",
+    "toolsDescription": "Browse 31 free calculators for concrete, paint, lumber, tile, yarn, resin, 3D printing, brewing and unit conversion — each with the formula and instant results.",
     "toolTitle": "{name} — Free Online Calculator | TechSawai",
     "toolDescription": "Use our free {name} for fast, accurate {category} results. See the formula, a worked example and answers to common questions — no sign-up needed.",
     "categoryTitle": "{category} Calculators — Free & Accurate | TechSawai",
-    "categoryDescription": "Free {category} calculators for quick, reliable estimates. Check the formula and get instant results in your language."
+    "categoryDescription": "Free {category} calculators with the formula, a worked example and instant results. Enter your measurements, check the maths and get a practical answer in your language."
   },
   "pages": {
     "aboutTitle": "About TechSawai",

@@ -49,6 +49,11 @@ export const routing = defineRouting({
   defaultLocale: "en",
   localePrefix: "always",
   localeDetection: false,
+  // Hreflang is published from one source of truth: HTML metadata plus the
+  // XML sitemap. next-intl's automatic HTTP Link header derives x-default from
+  // the unprefixed path ("/"), which conflicts with the "/en" x-default used
+  // by the metadata and sitemap. Disable the header to remove that conflict.
+  alternateLinks: false,
 });
 
 /** Country → recommended locale. Only countries where we have a matching language. */

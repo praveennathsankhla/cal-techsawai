@@ -10,6 +10,11 @@ export type ToolContent = {
   tips?: string[];
 };
 
+/** A locale override may translate only some fields of a tool's copy. */
+export type LocalizedToolContent = Partial<Omit<ToolContent, "formula">> & {
+  formula?: Partial<ToolContent["formula"]>;
+};
+
 export const constructionContent: Record<string, ToolContent> = {
   "concrete-volume-calculator": {
     intro:

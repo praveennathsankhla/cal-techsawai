@@ -18,11 +18,11 @@ import { UnitConverter } from "@/components/UnitConverter";
 import { ToolCard } from "@/components/ToolCard";
 import { ToolIcon } from "@/components/ToolIcon";
 import { JsonLd } from "@/components/JsonLd";
-import { getToolContent } from "@/data/content";
+import { getLocalizedToolContent } from "@/data/content";
 import { toolBySlug, tools, type CategoryId } from "@/data/tools";
 import { locales } from "@/i18n/routing";
 import { SITE } from "@/config/site";
-import { alternatesFor } from "@/lib/seo";
+import { alternatesFor, metaDescription } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ locale: string; slug: string }> };
 
@@ -57,7 +57,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const name = t(`toolNames.${tool.slug}`);
   const category = t(`categories.${tool.category}`);
   const title = t("seo.toolTitle", { name });
-  const description = t("seo.toolDescription", { name, category });
+  // Build a per-tool description from the first sentence of the localized
+  // intro. This keeps every tool unique, follows the translation work as it
+  // expands, and introduces no facts that are not already on the page.
+  const intro = getLocalizedToolContent(locale, slug)?.intro ?? "";
+  const firstSentence = intro.split(/(?<=[.!?।])\s/)[0]?.trim() ?? "";
+  const description = metaDescription(
+    firstSentence ? `${name}: ${firstSentence} ${t("tool.resultHint")}` : "",
+    t("seo.toolDescription", { name, category }),
+  );
   const path = `/tools/${tool.slug}`;
 
   return {
@@ -81,7 +89,7 @@ export default async function ToolPage({ params }: PageProps) {
   setRequestLocale(locale);
 
   const tool = toolBySlug(slug);
-  const content = getToolContent(slug);
+  const content = getLocalizedToolContent(locale, slug);
   if (!tool || !content) notFound();
 
   const t = await getTranslations();

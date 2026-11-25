@@ -7,6 +7,7 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import { routing, localeMeta, locales, type Locale } from "@/i18n/routing";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { GtmLoader } from "@/components/GtmLoader";
 import { IpLanguageBanner } from "@/components/IpLanguageBanner";
 import { SITE } from "@/config/site";
 import { alternatesFor } from "@/lib/seo";
@@ -119,11 +120,7 @@ export default async function LocaleLayout({
             gtag('js', new Date());
           `}
         </Script>
-        <Script
-          id="gtm-container"
-          src="https://www.googletagmanager.com/gtm.js?id=GTM-WWTH7SDZ"
-          strategy="afterInteractive"
-        />
+        <GtmLoader />
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-WWTH7SDZ"
@@ -141,8 +138,11 @@ export default async function LocaleLayout({
         </a>
         <NextIntlClientProvider messages={messages} locale={locale} timeZone="UTC">
           <Header />
+          {/* Server-rendered inside Suspense so cookie access does not block
+              static prerendering. The markup streams in the initial response;
+              it is not injected by a client effect. */}
           <Suspense fallback={null}>
-            <IpLanguageBanner />
+            <IpLanguageBanner locale={locale as Locale} />
           </Suspense>
           <main id="main-content" className="flex-1">
             {children}

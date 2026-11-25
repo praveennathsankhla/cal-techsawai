@@ -47,17 +47,62 @@ function withCountryCookie(response: NextResponse, country: string) {
   return response;
 }
 
+const CANONICAL_HOST = "techsawai.com";
+const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
+
+/**
+ * Send http:// and www. requests to the single canonical origin in one hop.
+ * Cloudflare supplies x-forwarded-proto/host; local development keeps its own
+ * origin so the dev server is unaffected.
+ */
+function canonicalRedirect(request: NextRequest): NextResponse | null {
+  const rawHost =
+    request.headers.get("x-forwarded-host") ??
+    request.headers.get("host") ??
+    request.nextUrl.host;
+  const host = rawHost.split(",")[0].trim().toLowerCase();
+  if (LOCAL_HOSTS.has(host.split(":")[0])) return null;
+
+  const rawProto =
+    request.headers.get("x-forwarded-proto") ??
+    request.nextUrl.protocol.replace(":", "");
+  const proto = rawProto.split(",")[0].trim().toLowerCase();
+
+  if (host === CANONICAL_HOST && proto === "https") return null;
+
+  const url = new URL(request.url);
+  url.protocol = "https:";
+  url.host = CANONICAL_HOST;
+  url.port = "";
+  return NextResponse.redirect(url, 301);
+}
+
+function preferredLocale(request: NextRequest): Locale {
+  const saved = request.cookies.get("NEXT_LOCALE")?.value;
+  return locales.includes(saved as Locale) ? (saved as Locale) : "en";
+}
+
 export function proxy(request: NextRequest) {
+  const canonical = canonicalRedirect(request);
+  if (canonical) return canonical;
+
   const { pathname } = request.nextUrl;
   const country = readCountry(request);
 
   // The locale prefix is always present. Send bare "/" to the saved or default locale.
   if (pathname === "/") {
-    const saved = request.cookies.get("NEXT_LOCALE")?.value;
-    const locale: Locale = locales.includes(saved as Locale) ? (saved as Locale) : "en";
     const url = request.nextUrl.clone();
-    url.pathname = `/${locale}`;
-    return withCountryCookie(NextResponse.redirect(url), country);
+    url.pathname = `/${preferredLocale(request)}`;
+    return withCountryCookie(NextResponse.redirect(url, 301), country);
+  }
+
+  // Route unprefixed paths ourselves so the permanent locale prefix uses a
+  // 301 instead of next-intl's default 307.
+  const firstSegment = pathname.split("/")[1];
+  if (!locales.includes(firstSegment as Locale)) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${preferredLocale(request)}${pathname === "/" ? "" : pathname}`;
+    return withCountryCookie(NextResponse.redirect(url, 301), country);
   }
 
   const missingPath = missingDetailPath(pathname);
