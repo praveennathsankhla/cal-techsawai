@@ -19,7 +19,7 @@ import { ToolIcon } from "@/components/ToolIcon";
 import { JsonLd } from "@/components/JsonLd";
 import { categoryIds, popularTools, tools, toolsByCategory } from "@/data/tools";
 import { SITE } from "@/config/site";
-import { alternatesFor } from "@/lib/seo";
+import { alternatesFor, socialImages } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -41,8 +41,9 @@ export async function generateMetadata({
       siteName: SITE.name,
       locale,
       type: "website",
+      images: socialImages.openGraph,
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: socialImages.twitter },
   };
 }
 
@@ -138,7 +139,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     <ToolIcon name={concrete.icon} className="h-4.5 w-4.5" />
                   </span>
                   <div>
-                    <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">{t("common.estimate")}</p>
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">{t("common.estimate")}</p>
                     <p className="text-sm font-semibold text-slate-800">{t(`toolNames.${concrete.slug}`)}</p>
                   </div>
                 </div>
@@ -158,27 +159,27 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-slate-400">{t("common.metric")}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-slate-500">{t("common.metric")}</p>
                   <p className="mt-1 text-lg font-bold text-slate-800">1.26 m³</p>
                 </div>
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-slate-400">{t("common.imperial")}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-slate-500">{t("common.imperial")}</p>
                   <p className="mt-1 text-lg font-bold text-slate-800">1.65 yd³</p>
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center gap-2 text-[11px] text-slate-400">
+              <div className="mt-4 flex items-center gap-2 text-[11px] text-slate-500">
                 <CheckCircle2 className="h-3.5 w-3.5 text-brand-500" aria-hidden="true" />
                 {t("home.why2Title")}
               </div>
             </div>
 
             <div className="absolute -left-3 bottom-8 hidden rotate-[-4deg] rounded-xl border border-slate-100 bg-white px-3 py-2 shadow-lg sm:block">
-              <p className="text-[10px] uppercase tracking-wide text-slate-400">{t("common.estimate")}</p>
+              <p className="text-[10px] uppercase tracking-wide text-slate-500">{t("common.estimate")}</p>
               <p className="text-sm font-bold text-slate-800">5 skeins</p>
             </div>
             <div className="absolute -right-4 top-16 hidden rotate-3 rounded-xl border border-slate-100 bg-white px-3 py-2 shadow-lg sm:block">
-              <p className="text-[10px] uppercase tracking-wide text-slate-400">PSU</p>
+              <p className="text-[10px] uppercase tracking-wide text-slate-500">PSU</p>
               <p className="text-sm font-bold text-slate-800">700 W</p>
             </div>
           </div>

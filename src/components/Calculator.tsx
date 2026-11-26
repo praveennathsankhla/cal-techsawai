@@ -175,7 +175,7 @@ export function Calculator({ slug }: { slug: string }) {
               <RotateCcw className="h-4 w-4" aria-hidden="true" />
               {t("common.reset")}
             </button>
-            <p className="text-xs text-slate-400">{t("tool.resultHint")}</p>
+            <p className="text-xs text-slate-500">{t("tool.resultHint")}</p>
           </div>
         </div>
 

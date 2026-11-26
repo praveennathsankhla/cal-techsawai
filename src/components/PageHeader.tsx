@@ -18,7 +18,7 @@ export function PageHeader({
         <div className="max-w-3xl">
           <h1 className="text-balance text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">{title}</h1>
           {description && <p className="mt-3 text-pretty text-base leading-relaxed text-slate-600">{description}</p>}
-          {updated && <p className="mt-3 text-xs font-medium text-slate-400">{updated}</p>}
+          {updated && <p className="mt-3 text-xs font-medium text-slate-500">{updated}</p>}
         </div>
       </div>
     </section>

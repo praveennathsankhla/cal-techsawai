@@ -3,6 +3,7 @@ export const SITE = {
   domain: "techsawai.com",
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://techsawai.com",
   tagline: "Practical calculators for building, making and everyday life.",
+  ogImage: "/og-image.png",
   description:
     "31 free, accurate calculators for construction, hobbies and everyday conversions. Check the maths, see the formula and get instant estimates in 18 languages.",
   email: "pnath6745@gmail.com",

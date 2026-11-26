@@ -18,11 +18,15 @@ import { UnitConverter } from "@/components/UnitConverter";
 import { ToolCard } from "@/components/ToolCard";
 import { ToolIcon } from "@/components/ToolIcon";
 import { JsonLd } from "@/components/JsonLd";
-import { getLocalizedToolContent } from "@/data/content";
+import {
+  getLocalizedToolContent,
+  hasTranslatedToolContent,
+  toolHreflangLocales,
+} from "@/data/content";
 import { toolBySlug, tools, type CategoryId } from "@/data/tools";
 import { locales } from "@/i18n/routing";
 import { SITE } from "@/config/site";
-import { alternatesFor, metaDescription } from "@/lib/seo";
+import { alternatesFor, metaDescription, socialImages } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ locale: string; slug: string }> };
 
@@ -67,20 +71,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     t("seo.toolDescription", { name, category }),
   );
   const path = `/tools/${tool.slug}`;
+  const canonicalLocale = hasTranslatedToolContent(locale, slug) ? locale : "en";
 
   return {
     title: { absolute: title },
     description,
-    alternates: alternatesFor(locale, path),
+    alternates: alternatesFor(canonicalLocale, path, {
+      allowedLocales: toolHreflangLocales(slug),
+    }),
     openGraph: {
       title,
       description,
-      url: `${SITE.url}/${locale}${path}`,
+      url: `${SITE.url}/${canonicalLocale}${path}`,
       siteName: SITE.name,
       locale,
       type: "website",
+      images: socialImages.openGraph,
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: socialImages.twitter },
   };
 }
 
@@ -97,7 +105,8 @@ export default async function ToolPage({ params }: PageProps) {
   const categoryName = t(`categories.${tool.category}`);
   const accent = accents[tool.category];
   const path = `/tools/${tool.slug}`;
-  const pageUrl = `${SITE.url}/${locale}${path}`;
+  const canonicalLocale = hasTranslatedToolContent(locale, slug) ? locale : "en";
+  const pageUrl = `${SITE.url}/${canonicalLocale}${path}`;
 
   const related = tools
     .filter((item) => item.slug !== tool.slug && item.category === tool.category)
@@ -119,7 +128,7 @@ export default async function ToolPage({ params }: PageProps) {
     applicationSubCategory: categoryName,
     operatingSystem: "Any",
     browserRequirements: "Requires JavaScript",
-    inLanguage: locale,
+    inLanguage: canonicalLocale,
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     publisher: {

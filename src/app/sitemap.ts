@@ -3,6 +3,7 @@ import { categoryIds, tools } from "@/data/tools";
 import { locales } from "@/i18n/routing";
 import { SITE } from "@/config/site";
 import { canonicalUrl, languageAlternates } from "@/lib/seo";
+import { toolHreflangLocales } from "@/data/content/localized";
 
 type Entry = {
   path: string;
@@ -32,14 +33,33 @@ const entries: Entry[] = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date(`${SITE.contentUpdated}T00:00:00Z`);
+  const toolPrefix = "/tools/";
 
-  return entries.flatMap((entry) =>
-    locales.map((locale) => ({
-      url: canonicalUrl(locale, entry.path),
-      lastModified,
-      changeFrequency: entry.changeFrequency,
-      priority: entry.priority,
-      alternates: { languages: languageAlternates(entry.path) },
-    })),
-  );
+  const sharedEntries = entries
+    .filter((entry) => !entry.path.startsWith(toolPrefix))
+    .flatMap((entry) =>
+      locales.map((locale) => ({
+        url: canonicalUrl(locale, entry.path),
+        lastModified,
+        changeFrequency: entry.changeFrequency,
+        priority: entry.priority,
+        alternates: { languages: languageAlternates(entry.path) },
+      })),
+    );
+
+  const toolEntries = entries
+    .filter((entry) => entry.path.startsWith(toolPrefix))
+    .flatMap((entry) => {
+      const slug = entry.path.slice(toolPrefix.length);
+      const allowedLocales = toolHreflangLocales(slug);
+      return allowedLocales.map((locale) => ({
+        url: canonicalUrl(locale, entry.path),
+        lastModified,
+        changeFrequency: entry.changeFrequency,
+        priority: entry.priority,
+        alternates: { languages: languageAlternates(entry.path, allowedLocales) },
+      }));
+    });
+
+  return [...sharedEntries, ...toolEntries];
 }

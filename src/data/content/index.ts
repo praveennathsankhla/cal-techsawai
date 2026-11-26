@@ -5,6 +5,7 @@ import { universalContent } from "./universal";
 import { getLocalizedContent, mergeToolContent } from "./localized";
 
 export type { ToolContent };
+export { getLocalizedContent, hasTranslatedToolContent, toolHreflangLocales } from "./localized";
 
 export const toolContent: Record<string, ToolContent> = {
   ...constructionContent,

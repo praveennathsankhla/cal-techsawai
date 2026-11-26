@@ -45,7 +45,7 @@ export function ToolDirectory({
             onChange={(event) => setQuery(event.target.value)}
             aria-label={t("nav.search")}
             placeholder={t("home.searchPlaceholder")}
-            className="h-13 min-h-13 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-12 pr-11 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:bg-white focus:ring-4 focus:ring-brand-500/10 [&::-webkit-search-cancel-button]:hidden"
+            className="h-13 min-h-13 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-12 pr-11 text-base text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-brand-400 focus:bg-white focus:ring-4 focus:ring-brand-500/10 [&::-webkit-search-cancel-button]:hidden"
           />
           {query && (
             <button
@@ -60,7 +60,7 @@ export function ToolDirectory({
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <span className="mr-1 hidden items-center gap-1.5 text-xs font-medium text-slate-400 sm:flex">
+          <span className="mr-1 hidden items-center gap-1.5 text-xs font-medium text-slate-500 sm:flex">
             <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
           {(["all", ...categoryIds] as const).map((item) => (
@@ -79,7 +79,7 @@ export function ToolDirectory({
               {item === "all" ? t("categories.all") : t(`categories.${item}`)}
             </button>
           ))}
-          <span className="ml-auto text-xs font-medium tabular-nums text-slate-400">
+          <span className="ml-auto text-xs font-medium tabular-nums text-slate-500">
             {t("home.toolsFound", { count: filtered.length })}
           </span>
         </div>

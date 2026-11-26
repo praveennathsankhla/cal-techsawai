@@ -10,7 +10,7 @@ import { Footer } from "@/components/Footer";
 import { GtmLoader } from "@/components/GtmLoader";
 import { IpLanguageBanner } from "@/components/IpLanguageBanner";
 import { SITE } from "@/config/site";
-import { alternatesFor } from "@/lib/seo";
+import { alternatesFor, socialImages } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import "../globals.css";
 
@@ -48,11 +48,13 @@ export async function generateMetadata({
       description: t("defaultDescription"),
       url: `${SITE.url}/${locale}`,
       locale,
+      images: socialImages.openGraph,
     },
     twitter: {
       card: "summary_large_image",
       title: t("defaultTitle"),
       description: t("defaultDescription"),
+      images: socialImages.twitter,
     },
     robots: {
       index: true,

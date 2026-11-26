@@ -89,7 +89,7 @@ export function ToolSearch({
           }}
           placeholder={isHero ? t("home.searchPlaceholder") : t("nav.searchPlaceholder")}
           className={cn(
-            "w-full rounded-xl border border-slate-200 bg-white text-slate-900 shadow-xs outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10",
+            "w-full rounded-xl border border-slate-200 bg-white text-slate-900 shadow-xs outline-none transition placeholder:text-slate-500 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10",
             isHero ? "h-14 pl-12 pr-12 text-base sm:text-lg" : "h-10 pl-10 pr-9 text-sm",
             "[&::-webkit-search-cancel-button]:hidden",
           )}
@@ -121,7 +121,7 @@ export function ToolSearch({
         >
           {results.length > 0 ? (
             <>
-              <p className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+              <p className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                 {t("home.toolsFound", { count: results.length })}
               </p>
               {results.map(({ tool, name }) => (

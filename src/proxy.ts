@@ -2,6 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { locales, routing, type Locale } from "./i18n/routing";
 import { categoryIds, toolBySlug } from "./data/tools";
+import { LEGACY_GONE, LEGACY_REDIRECTS, normalizeLegacyPath } from "./lib/legacy-urls";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -82,12 +83,36 @@ function preferredLocale(request: NextRequest): Locale {
   return locales.includes(saved as Locale) ? (saved as Locale) : "en";
 }
 
+function goneResponse() {
+  return new NextResponse("Gone\n", {
+    status: 410,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=86400",
+    },
+  });
+}
+
 export function proxy(request: NextRequest) {
   const canonical = canonicalRedirect(request);
   if (canonical) return canonical;
 
   const { pathname } = request.nextUrl;
   const country = readCountry(request);
+  const legacyPath = normalizeLegacyPath(pathname);
+
+  // WordPress search URLs have no equivalent on the rewritten site.
+  if (legacyPath === "/" && request.nextUrl.searchParams.has("s")) {
+    return goneResponse();
+  }
+
+  if (LEGACY_GONE.has(legacyPath)) return goneResponse();
+
+  const legacyTarget = LEGACY_REDIRECTS[legacyPath];
+  if (legacyTarget) {
+    const url = new URL(legacyTarget, request.url);
+    return withCountryCookie(NextResponse.redirect(url, 301), country);
+  }
 
   // The locale prefix is always present. Send bare "/" to the saved or default locale.
   if (pathname === "/") {

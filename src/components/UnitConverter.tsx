@@ -185,7 +185,7 @@ export function UnitConverter() {
             >
               {tc("reset")}
             </button>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               {t("from")} {unitSymbol(category, from)} → {unitSymbol(category, to)}
             </p>
           </div>

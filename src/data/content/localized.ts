@@ -40,3 +40,16 @@ export function mergeToolContent(base: ToolContent, override?: LocalizedToolCont
 export function getLocalizedContent(locale: string, slug: string): LocalizedToolContent | undefined {
   return localizedContent[locale]?.[slug];
 }
+
+/** English is always indexable; other locales qualify only with real tool content. */
+export function hasTranslatedToolContent(locale: string, slug: string): boolean {
+  return locale === "en" || Boolean(localizedContent[locale]?.[slug]);
+}
+
+/** Locales that should appear in a tool page's hreflang set and the sitemap. */
+export function toolHreflangLocales(slug: string): string[] {
+  return [
+    "en",
+    ...Object.keys(localizedContent).filter((locale) => Boolean(localizedContent[locale]?.[slug])),
+  ];
+}

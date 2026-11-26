@@ -10,7 +10,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { categoryIds, toolsByCategory, type CategoryId } from "@/data/tools";
 import { locales } from "@/i18n/routing";
 import { SITE } from "@/config/site";
-import { alternatesFor } from "@/lib/seo";
+import { alternatesFor, socialImages } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ locale: string; category: string }> };
 
@@ -41,8 +41,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: SITE.name,
       locale,
       type: "website",
+      images: socialImages.openGraph,
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: socialImages.twitter },
   };
 }
 
@@ -97,7 +98,7 @@ export default async function CategoryPage({ params }: PageProps) {
               <p className="mt-2 text-pretty text-base leading-relaxed text-slate-600">
                 {t(`categoryDescriptions.${category}`)}
               </p>
-              <p className="mt-2 text-xs font-medium text-slate-400">
+              <p className="mt-2 text-xs font-medium text-slate-500">
                 {t("home.toolsFound", { count: categoryTools.length })}
               </p>
             </div>

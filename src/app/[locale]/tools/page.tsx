@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { categoryIds, tools, toolsByCategory } from "@/data/tools";
 import { locales } from "@/i18n/routing";
 import { SITE } from "@/config/site";
-import { alternatesFor } from "@/lib/seo";
+import { alternatesFor, socialImages } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ locale: string }> };
 
@@ -33,8 +33,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: SITE.name,
       locale,
       type: "website",
+      images: socialImages.openGraph,
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: socialImages.twitter },
   };
 }
 
@@ -97,7 +98,7 @@ export default async function AllToolsPage({ params }: PageProps) {
                     {t(`categories.${category}`)}
                   </h2>
                   <p className="mt-1 text-sm leading-relaxed text-slate-500">{t(`categoryDescriptions.${category}`)}</p>
-                  <p className="mt-2 text-xs font-medium text-slate-400">{t("home.toolsFound", { count })}</p>
+                  <p className="mt-2 text-xs font-medium text-slate-500">{t("home.toolsFound", { count })}</p>
                 </div>
                 <ArrowRight
                   className="mt-1 h-5 w-5 shrink-0 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-brand-700"

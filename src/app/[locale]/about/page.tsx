@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SITE } from "@/config/site";
 import { tools } from "@/data/tools";
 import { locales } from "@/i18n/routing";
-import { alternatesFor } from "@/lib/seo";
+import { alternatesFor, socialImages } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ locale: string }> };
 
@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: { absolute: title },
     description,
     alternates: alternatesFor(locale, "/about"),
-    openGraph: { title, description, url: `${SITE.url}/${locale}/about`, siteName: SITE.name, locale, type: "website" },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: { title, description, url: `${SITE.url}/${locale}/about`, siteName: SITE.name, locale, type: "website", images: socialImages.openGraph },
+    twitter: { card: "summary_large_image", title, description, images: socialImages.twitter },
   };
 }
 

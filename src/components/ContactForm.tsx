@@ -200,7 +200,7 @@ export function ContactForm() {
           )}
           {status === "sending" ? tc("sending") : tc("send")}
         </button>
-        <p className="text-xs text-slate-400">{t("responseTime")}</p>
+        <p className="text-xs text-slate-500">{t("responseTime")}</p>
       </div>
 
       <p className="mt-4 text-xs leading-relaxed text-slate-500">
